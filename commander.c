@@ -9,14 +9,12 @@
 #include "processManager.h"
 
 
-
-
 int main(int argc, char *argv[])
 {
 	
 
 	//Hold process IDs
-	pthread_t pid;
+	pid_t pid;
 
 	//Pipe file descriptors
 	int pipe_fd[2];

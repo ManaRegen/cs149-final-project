@@ -20,6 +20,18 @@ static void unblockProcess();
 static void reporterProcess();
 
 void processManager(int pipe_fd[2]) {
+    //Initialize the queue
+    initializeQueue(&readyState);
+
+    //Loop to add all processes to the readyState queue
+    for (int i = 0; isEmpty(&readyState) != true; i++)
+    {
+        enqueue(&readyState, &pcbTable[i]);
+    }
+
+    //Debug print
+    printQueue(&readyState);
+
     close(pipe_fd[1]); // Close unused write end
     char command;
     
