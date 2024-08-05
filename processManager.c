@@ -56,7 +56,17 @@ void processManager(int pipe_fd[2]) {
                 }
                 break;
             case 'T':
-                
+                // Print average turnaround time and terminate the system
+                int avgTurnaround;
+                if (completedProcessesCount == 0) {
+                    avgTurnaround = 0;
+                } else {
+                    avgTurnaround = totalTurnaround / completedProcessesCount;
+                }
+                printf("Average turnaround time: %d\n", avgTurnaround);
+                printf("Terminating system.\n");
+                close(pipe_fd[0]);
+                return;
             default:
                 printf("Invalid command. Please try again.\n");
                 break;
