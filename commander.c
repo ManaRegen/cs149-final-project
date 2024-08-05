@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 		while (true)
 		{
 			//Prompt user
-			printf("$");
+			printf("$ ");
 			scanf("%s", command);
 
 			//Send command to process manager
