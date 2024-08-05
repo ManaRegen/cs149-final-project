@@ -5,6 +5,9 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <sys/wait.h>
+#include <unistd.h>
+#include "processManager.h"
+
 
 
 
@@ -64,9 +67,7 @@ int main(int argc, char *argv[])
 	//Process manager
 	else
 	{
-		//Read command from commander process
-		read(pipe_fd[0], read_msg, strlen(read_msg) + 1);
-		printf("This is the process manager, here's the command from the commander process:  %s\n", read_msg);
+		processManager(pipe_fd);
 		exit(0);
 	}
 
