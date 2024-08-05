@@ -4,8 +4,8 @@
 #include "queue.h"
 #include "structs.h"
 
-int totalTurnaround;
-int completedProcessesCount;
+int totalTurnaround = 0;
+int completedProcessesCount = 0;
 
 Queue readyState;
 Queue blockedState;
@@ -57,11 +57,15 @@ void processManager(int pipe_fd[2]) {
                 break;
             case 'T':
                 // Print average turnaround time and terminate the system
-
-                int avgTurnaround = totalTurnaround / completedProcessesCount;
+                int avgTurnaround;
+                if (completedProcessesCount == 0) {
+                    avgTurnaround = 0;
+                } else {
+                    avgTurnaround = totalTurnaround / completedProcessesCount;
+                }
                 printf("Average turnaround time: %d\n", avgTurnaround);
                 printf("Terminating system.\n");
-
+                close(pipe_fd[0]);
                 return;
             default:
                 printf("Invalid command. Please try again.\n");
@@ -83,7 +87,7 @@ static void unblockProcess() {
 
 }
 
-static void reporterProcess() {
+static void reporterProcess() { // to be completed
     printf("****************************************************************\n");
     printf("The current system state is as follows:\n");
     printf("****************************************************************\n\n");
