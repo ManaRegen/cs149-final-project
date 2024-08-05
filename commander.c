@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include <sys/wait.h>
 
 
@@ -16,8 +17,8 @@ int main(int argc, char *argv[])
 
 	//Pipe file descriptors
 	int pipe_fd[2];
-	char read_msg[1];
-	char command[1];
+	char read_msg[2];
+	char command[2];
 
 	//Setup pipe, read is fd[0] and write is fd[1]
 	if (pipe(pipe_fd) == -1)
@@ -35,7 +36,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	//Parent process
+	//Commander process
 	if (pid > 0)
 	{
 		while (true)
@@ -43,6 +44,11 @@ int main(int argc, char *argv[])
 			//Prompt user
 			printf("$ ");
 			scanf("%s", command);
+
+			for (int i = 0; command[i] != '\0'; i++)
+			{
+				command[i] = toupper(command[i]);
+			}
 
 			//Send command to process manager
 			close(pipe_fd[0]);
@@ -55,7 +61,7 @@ int main(int argc, char *argv[])
 		
 	}
 
-	//Child process
+	//Process manager
 	else
 	{
 		//Read command from commander process
