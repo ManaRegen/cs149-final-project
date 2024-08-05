@@ -8,18 +8,12 @@ typedef struct {
 } Instruction;
 
 typedef struct {
-    Instruction instructions[99];
+    int *program;
     int programCounter;
     int value;
     int timeSlice;
     int timeSliceUsed;
 } Cpu;
-
-enum State {
-    STATE_READY,
-    STATE_RUNNING,
-    STATE_BLOCKED
-};
 
 typedef struct {
     int processId;
@@ -28,7 +22,6 @@ typedef struct {
     int programCounter;
     int value;
     int priority;
-    State state;
     int startTime;
     int timeUsed;
 } PcbEntry;

@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "queue.h"
 #include "structs.h"
 
@@ -11,6 +13,11 @@ int runningState = -1;
 int time = 0;
 
 PcbEntry pcbTable[99];
+
+static void runProcess();
+static void blockProcess();
+static void unblockProcess();
+static void reporterProcess();
 
 void processManager(int pipe_fd[2]) {
     close(pipe_fd[1]); // Close unused write end
@@ -65,6 +72,14 @@ static void unblockProcess() {
 }
 
 static void reporterProcess() {
+    printf("****************************************************************\n");
+    printf("The current system state is as follows:\n");
+    printf("****************************************************************\n\n");
+
+    printf("CURRENT TIME: %d\n\n", time);
+
+    printf("RUNNING PROCESSES: \n");
+
 
 }
 
