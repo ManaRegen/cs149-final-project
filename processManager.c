@@ -24,9 +24,9 @@ void processManager(int pipe_fd[2]) {
     initializeQueue(&readyState);
 
     //Loop to add all processes to the readyState queue
-    for (int i = 0; isEmpty(&readyState) != true; i++)
+    for (int i = 0; i < 99; i++)
     {
-        enqueue(&readyState, &pcbTable[i]);
+        enqueue(&readyState, pcbTable[i].processId);
     }
 
     //Debug print
