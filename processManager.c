@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include "queue.h"
 #include "structs.h"
 #include "q.h"
+
 
 int totalTurnaround = 0;
 int completedProcessesCount = 0;
@@ -15,11 +17,12 @@ int time = 0;
 
 PcbEntry pcbTable[99];
 
+static void runProcess();
 static void blockProcess();
 static void unblockProcess();
 static void reporterProcess();
 
-void processManager(int pipe_fd[2]) {
+void processManager(int command_fd[2], int response_fd[2]) {
     //Initialize the queue
     initializeQueue(&readyState);
 
@@ -29,10 +32,13 @@ void processManager(int pipe_fd[2]) {
         enqueue(&readyState, pcbTable[i].processId);
     }
 
-    close(pipe_fd[1]); // Close unused write end
+    close(command_fd[1]); // Close unused write end
+    close(response_fd[0]); // close unused read end
     char command;
+    char signal;
     
-    while (read(pipe_fd[0], &command, sizeof(command)) > 0) {
+    while (true) {
+        read(command_fd[0], &command, 1);
         switch (command) {
             case 'Q':
                 q();
@@ -47,6 +53,7 @@ void processManager(int pipe_fd[2]) {
                     reporterProcess();
                     exit(0);
                 }
+                wait(NULL);
                 break;
             case 'T':
                 // Print average turnaround time and terminate the system
@@ -56,16 +63,34 @@ void processManager(int pipe_fd[2]) {
                 } else {
                     avgTurnaround = totalTurnaround / completedProcessesCount;
                 }
+
                 printf("Average turnaround time: %d\n", avgTurnaround);
                 printf("Terminating system.\n");
-                close(pipe_fd[0]);
+
+                close(command_fd[0]);
+                close(response_fd[1]);
+
+                signal = 'T';
+                write(response_fd[1], &signal, sizeof(char));
                 return;
             default:
                 printf("Invalid command. Please try again.\n");
                 break;
         }
+        signal = 1;
+        write(response_fd[1], &signal, sizeof(char));
     }
 
+}
+
+static void runProcess() { // selects process from the top of the readyState queue to run
+    //Update runningState and readyState
+    if (!isEmpty(&readyState))
+    {
+        runningState = readyState.front;
+        dequeue(&readyState);
+    }
+    
 }
 
 static void blockProcess() {
