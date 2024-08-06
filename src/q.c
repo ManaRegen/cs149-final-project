@@ -3,6 +3,7 @@
 
 extern Queue readyState;
 extern int runningState;
+extern int time;
 
 void runProcess()
 { // selects process from the top of the readyState queue to run
@@ -12,6 +13,7 @@ void runProcess()
         runningState = readyState.front;
         dequeue(&readyState);
     }
+    time++;
 }
 
 void q()
