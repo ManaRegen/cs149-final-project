@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include "queue.h"
-#include "structs.h"
-#include "q.h"
-#include "p.h"
-#include "u.h"
-#include "t.h"
+#include "../headers/queue.h"
+#include "../headers/structs.h"
+#include "../headers/q.h"
+#include "../headers/p.h"
+#include "../headers/u.h"
+#include "../headers/t.h"
 
 int totalTurnaround = 0;
 int completedProcessesCount = 0;

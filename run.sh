@@ -1,2 +1,2 @@
-gcc commander.c processManager.c queue.c q.c p.c u.c t.c -o os
+gcc src/commander.c src/processManager.c src/queue.c src/q.c src/p.c src/u.c src/t.c -o os
 ./os

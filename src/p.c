@@ -1,4 +1,4 @@
-#include "p.h"
+#include "../headers/p.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

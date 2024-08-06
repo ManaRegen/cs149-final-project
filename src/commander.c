@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include "processManager.h"
+#include "../headers/processManager.h"
 
 int main(int argc, char *argv[])
 {
