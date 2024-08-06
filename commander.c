@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
 	//Commander process
 	if (pid > 0)
 	{
+		close(pipe_fd[0]);
+		
 		while (true)
 		{
 			//Prompt user
@@ -52,14 +54,12 @@ int main(int argc, char *argv[])
 			}
 
 			//Send command to process manager
-			close(pipe_fd[0]);
-			write(pipe_fd[1], command, strlen(command) + 1);	
-			close(pipe_fd[1]);
-
-			//Wait for manager to terminate
-			wait(NULL);
+			write(pipe_fd[1], command, strlen(command) + 1);
+			
 		}
-		
+		wait(NULL);
+		close(pipe_fd[1]);
+		exit(0);
 	}
 
 	//Process manager

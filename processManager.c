@@ -29,9 +29,6 @@ void processManager(int pipe_fd[2]) {
         enqueue(&readyState, pcbTable[i].processId);
     }
 
-    //Debug print
-    printQueue(&readyState);
-
     close(pipe_fd[1]); // Close unused write end
     char command;
     
