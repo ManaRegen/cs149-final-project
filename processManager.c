@@ -7,6 +7,7 @@
 #include "q.h"
 #include "p.h"
 #include "u.h"
+#include "t.h"
 
 int totalTurnaround = 0;
 int completedProcessesCount = 0;
@@ -40,58 +41,25 @@ void processManager(int command_fd[2], int response_fd[2])
     while (true)
     {
         read(command_fd[0], &command, 1);
-        switch (command)
-        {
-        case 'Q':
-            q();
-            break;
-        case 'U':
-            // Unblock the first process in the blocked queue
-            u();
-            break;
-        case 'P':
-            p();
-            break;
-        case 'T':
-            // Print average turnaround time and terminate the system
-            int avgTurnaround;
-            if (completedProcessesCount == 0)
-            {
-                avgTurnaround = 0;
-            }
-            else
-            {
-                avgTurnaround = totalTurnaround / completedProcessesCount;
-            }
-
-            printf("Average turnaround time: %d\n", avgTurnaround);
-            printf("Terminating system.\n");
-
-            close(command_fd[0]);
-            close(response_fd[1]);
-
-            signal = 'T';
-            write(response_fd[1], &signal, sizeof(char));
-            return;
-        default:
-            printf("Invalid command. Please try again.\n");
-            break;
+        switch (command) {
+            case 'Q':
+                q();
+                break;
+            case 'U':
+                // Unblock the first process in the blocked queue
+                u();
+                break;
+            case 'P':
+                p();
+                break;
+            case 'T':
+                t(command_fd, response_fd);
+                return;
+            default:
+                printf("Invalid command. Please try again.\n");
+                break;
         }
         signal = 1;
         write(response_fd[1], &signal, sizeof(char));
     }
-}
-
-static void runProcess()
-{ // selects process from the top of the readyState queue to run
-    // Update runningState and readyState
-    if (!isEmpty(&readyState))
-    {
-        runningState = readyState.front;
-        dequeue(&readyState);
-    }
-}
-
-static void blockProcess()
-{
 }

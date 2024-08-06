@@ -1,13 +1,15 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
-typedef struct {
+typedef struct
+{
     char operation;
     int intArg;
     char stringArg[99];
 } Instruction;
 
-typedef struct {
+typedef struct
+{
     int *program;
     int programCounter;
     int value;
@@ -15,7 +17,8 @@ typedef struct {
     int timeSliceUsed;
 } Cpu;
 
-typedef struct {
+typedef struct
+{
     int processId;
     int parentProcessId;
     Instruction program[99];

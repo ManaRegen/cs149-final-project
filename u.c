@@ -1,9 +1,8 @@
-
-
-static void unblockProcess() {
-
+static void unblockProcess()
+{
+    
 }
 
-void u() {
-
+void u()
+{
 }

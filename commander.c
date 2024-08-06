@@ -8,20 +8,18 @@
 #include <unistd.h>
 #include "processManager.h"
 
-
 int main(int argc, char *argv[])
 {
-	
 
-	//Hold process IDs
+	// Hold process IDs
 	pid_t pid;
 
-	//Pipe file descriptors
-	int command_fd[2];		// used for sending commands to process manager
-	int response_fd[2];		// used for to process manager to indicate that it has completed executing a command
+	// Pipe file descriptors
+	int command_fd[2];	// used for sending commands to process manager
+	int response_fd[2]; // used for to process manager to indicate that it has completed executing a command
 	char command;
 
-	//Setup pipe, read is fd[0] and write is fd[1]
+	// Setup pipe, read is fd[0] and write is fd[1]
 	if (pipe(command_fd) == -1)
 	{
 		return 1;
@@ -32,25 +30,25 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	//Fork child process
+	// Fork child process
 	pid = fork();
 
-	//Error handling for child process creation
+	// Error handling for child process creation
 	if (pid < 0)
 	{
 		printf("Error creating child\n");
 		return 1;
 	}
 
-	//Commander process
+	// Commander process
 	if (pid > 0)
 	{
 		close(command_fd[0]);
 		close(response_fd[1]);
-		
+
 		while (true)
 		{
-			//Prompt user
+			// Prompt user
 			printf("$ ");
 			scanf(" %c", &command);
 
@@ -58,12 +56,13 @@ int main(int argc, char *argv[])
 			printf("Received command: '%c'\n", command); // debug
 			char response;
 
-			//Send command to process manager
+			// Send command to process manager
 			write(command_fd[1], &command, sizeof(char));
 			read(response_fd[0], &response, sizeof(char));
-            if (command == 'T') {
-                break;
-            }
+			if (command == 'T')
+			{
+				break;
+			}
 		}
 		wait(NULL);
 		close(command_fd[1]);
@@ -71,13 +70,13 @@ int main(int argc, char *argv[])
 		exit(0);
 	}
 
-	//Process manager
+	// Process manager
 	else
 	{
 		processManager(command_fd, response_fd);
 		exit(0);
 	}
 
-	//Debug
+	// Debug
 	printf("End of main\n");
 }
