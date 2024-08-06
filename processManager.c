@@ -6,7 +6,7 @@
 #include "structs.h"
 #include "q.h"
 #include "p.h"
-
+#include "u.h"
 
 int totalTurnaround = 0;
 int completedProcessesCount = 0;
@@ -19,7 +19,6 @@ int time = 0;
 PcbEntry pcbTable[99];
 
 static void blockProcess();
-static void unblockProcess();
 static void reporterProcess();
 
 void processManager(int command_fd[2], int response_fd[2]) {
@@ -45,7 +44,7 @@ void processManager(int command_fd[2], int response_fd[2]) {
                 break;
             case 'U':
                 // Unblock the first process in the blocked queue
-
+                u();
                 break;
             case 'P':
                 p();
@@ -89,9 +88,5 @@ static void runProcess() { // selects process from the top of the readyState que
 }
 
 static void blockProcess() {
-
-}
-
-static void unblockProcess() {
 
 }
