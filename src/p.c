@@ -7,7 +7,7 @@ extern int time;
 
 static void reporterProcess()
 { // to be completed
-    printf("****************************************************************\n");
+    printf("\n****************************************************************\n");
     printf("The current system state is as follows:\n");
     printf("****************************************************************\n\n");
 
