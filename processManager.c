@@ -5,6 +5,7 @@
 #include "queue.h"
 #include "structs.h"
 #include "q.h"
+#include "p.h"
 
 
 int totalTurnaround = 0;
@@ -17,7 +18,6 @@ int time = 0;
 
 PcbEntry pcbTable[99];
 
-static void runProcess();
 static void blockProcess();
 static void unblockProcess();
 static void reporterProcess();
@@ -48,12 +48,7 @@ void processManager(int command_fd[2], int response_fd[2]) {
 
                 break;
             case 'P':
-                // Spawn a reporter process
-                if (fork() == 0) {
-                    reporterProcess();
-                    exit(0);
-                }
-                wait(NULL);
+                p();
                 break;
             case 'T':
                 // Print average turnaround time and terminate the system
@@ -100,16 +95,3 @@ static void blockProcess() {
 static void unblockProcess() {
 
 }
-
-static void reporterProcess() { // to be completed
-    printf("****************************************************************\n");
-    printf("The current system state is as follows:\n");
-    printf("****************************************************************\n\n");
-
-    printf("CURRENT TIME: %d\n\n", time);
-
-    printf("RUNNING PROCESSES: \n");
-
-
-}
-
