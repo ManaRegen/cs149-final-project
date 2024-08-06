@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
 
 	//Pipe file descriptors
 	int pipe_fd[2];
-	char read_msg[2];
-	char command[2];
+	char command;
 
 	//Setup pipe, read is fd[0] and write is fd[1]
 	if (pipe(pipe_fd) == -1)
@@ -46,15 +45,12 @@ int main(int argc, char *argv[])
 		{
 			//Prompt user
 			printf("$ ");
-			scanf("%s", command);
+			scanf("%c", &command);
 
-			for (int i = 0; command[i] != '\0'; i++)
-			{
-				command[i] = toupper(command[i]);
-			}
+			command = toupper(command);
 
 			//Send command to process manager
-			write(pipe_fd[1], command, strlen(command) + 1);
+			write(pipe_fd[1], &command, sizeof(char));
 			
 		}
 		wait(NULL);
