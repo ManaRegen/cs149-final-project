@@ -1,4 +1,4 @@
-#include "runProcess.h"
+#include "q.h"
 #include "queue.h" // Include for Queue related operations
 #include "structs.h" // Include for PcbEntry
 
@@ -10,5 +10,12 @@ void runProcess() { // selects process from the top of the readyState queue to r
     if (!isEmpty(&readyState)) {
         runningState = readyState.front;
         dequeue(&readyState);
+    }
+}
+
+void q() {
+    // Execute the next instruction of the running process
+    if (runningState == -1) {
+        runProcess();
     }
 }
