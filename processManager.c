@@ -73,7 +73,18 @@ void processManager(int pipe_fd[2]) {
 }
 
 static void runProcess() { // selects process from the top of the readyState queue to run
-
+    //Update runningState and readyState
+    if (!isEmpty(&readyState))
+    {
+        printf("It's not empty");
+        printQueue(&readyState);
+        runningState = readyState.front;
+        dequeue(&readyState);
+        printf("%d\n", runningState);
+        runningState = readyState.front;
+        printf("%d\n", runningState);
+    }
+    
 }
 
 static void blockProcess() {
