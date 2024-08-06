@@ -17,11 +17,17 @@ int main(int argc, char *argv[])
 	pid_t pid;
 
 	//Pipe file descriptors
-	int pipe_fd[2];
+	int command_fd[2];		// used for sending commands to process manager
+	int response_fd[2];		// used for to process manager to indicate that it has completed executing a command
 	char command;
 
 	//Setup pipe, read is fd[0] and write is fd[1]
-	if (pipe(pipe_fd) == -1)
+	if (pipe(command_fd) == -1)
+	{
+		return 1;
+	}
+
+	if (pipe(response_fd) == -1)
 	{
 		return 1;
 	}
@@ -39,7 +45,8 @@ int main(int argc, char *argv[])
 	//Commander process
 	if (pid > 0)
 	{
-		close(pipe_fd[0]);
+		close(command_fd[0]);
+		close(response_fd[1]);
 		
 		while (true)
 		{
@@ -48,20 +55,22 @@ int main(int argc, char *argv[])
 			scanf("%c", &command);
 
 			command = toupper(command);
+			int response;
 
 			//Send command to process manager
-			write(pipe_fd[1], &command, sizeof(char));
-			
+			write(command_fd[1], &command, sizeof(char));
+			read(response_fd[0], &response, sizeof(char));
 		}
 		wait(NULL);
-		close(pipe_fd[1]);
+		close(command_fd[1]);
+		close(response_fd[0]);
 		exit(0);
 	}
 
 	//Process manager
 	else
 	{
-		processManager(pipe_fd);
+		processManager(command_fd, response_fd);
 		exit(0);
 	}
 

@@ -19,7 +19,7 @@ static void blockProcess();
 static void unblockProcess();
 static void reporterProcess();
 
-void processManager(int pipe_fd[2]) {
+void processManager(int command_fd[2], int response_fd[2]) {
     //Initialize the queue
     initializeQueue(&readyState);
 
@@ -29,10 +29,12 @@ void processManager(int pipe_fd[2]) {
         enqueue(&readyState, pcbTable[i].processId);
     }
 
-    close(pipe_fd[1]); // Close unused write end
+    close(command_fd[1]); // Close unused write end
+    close(response_fd[0]); // close unused read end
     char command;
     
-    while (read(pipe_fd[0], &command, sizeof(command)) > 0) {
+    while (true) {
+        read(command_fd[0], &command, sizeof(command));
         switch (command) {
             case 'Q':
                 // Execute the next instruction of the running process
@@ -62,12 +64,17 @@ void processManager(int pipe_fd[2]) {
                 }
                 printf("Average turnaround time: %d\n", avgTurnaround);
                 printf("Terminating system.\n");
-                close(pipe_fd[0]);
+                close(command_fd[0]);
+                close(response_fd[1]);
+
+                
                 return;
             default:
                 printf("Invalid command. Please try again.\n");
                 break;
         }
+        char signal = 1;
+        write(response_fd[1], &signal, sizeof(char));
     }
 
 }
