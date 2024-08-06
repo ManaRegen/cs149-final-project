@@ -13,7 +13,7 @@ void runProcess()
         runningState = readyState.front;
         dequeue(&readyState);
     }
-    time++;
+    
 }
 
 void q()
@@ -23,4 +23,5 @@ void q()
     {
         runProcess();
     }
+    time++;
 }
