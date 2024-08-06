@@ -47,7 +47,7 @@ void processManager(int command_fd[2], int response_fd[2])
                 break;
             case 'U':
                 // Unblock the first process in the blocked queue
-                u();
+                u(blockedState, readyState);
                 break;
             case 'P':
                 p();
