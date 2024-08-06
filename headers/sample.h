@@ -4,6 +4,6 @@
 
 #include "structs.h"
 
-extern Instruction sample[];
+extern Instruction init[];
 
 #endif // sample_H
