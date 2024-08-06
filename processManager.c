@@ -76,13 +76,8 @@ static void runProcess() { // selects process from the top of the readyState que
     //Update runningState and readyState
     if (!isEmpty(&readyState))
     {
-        printf("It's not empty");
-        printQueue(&readyState);
         runningState = readyState.front;
         dequeue(&readyState);
-        printf("%d\n", runningState);
-        runningState = readyState.front;
-        printf("%d\n", runningState);
     }
     
 }
