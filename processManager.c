@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include "queue.h"
 #include "structs.h"
 
@@ -32,9 +33,10 @@ void processManager(int command_fd[2], int response_fd[2]) {
     close(command_fd[1]); // Close unused write end
     close(response_fd[0]); // close unused read end
     char command;
+    char signal;
     
     while (true) {
-        read(command_fd[0], &command, sizeof(command));
+        read(command_fd[0], &command, 1);
         switch (command) {
             case 'Q':
                 // Execute the next instruction of the running process
@@ -53,6 +55,7 @@ void processManager(int command_fd[2], int response_fd[2]) {
                     reporterProcess();
                     exit(0);
                 }
+                wait(NULL);
                 break;
             case 'T':
                 // Print average turnaround time and terminate the system
@@ -62,18 +65,21 @@ void processManager(int command_fd[2], int response_fd[2]) {
                 } else {
                     avgTurnaround = totalTurnaround / completedProcessesCount;
                 }
+
                 printf("Average turnaround time: %d\n", avgTurnaround);
                 printf("Terminating system.\n");
+
                 close(command_fd[0]);
                 close(response_fd[1]);
 
-                
+                signal = 'T';
+                write(response_fd[1], &signal, sizeof(char));
                 return;
             default:
                 printf("Invalid command. Please try again.\n");
                 break;
         }
-        char signal = 1;
+        signal = 1;
         write(response_fd[1], &signal, sizeof(char));
     }
 

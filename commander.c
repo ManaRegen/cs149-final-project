@@ -52,14 +52,18 @@ int main(int argc, char *argv[])
 		{
 			//Prompt user
 			printf("$ ");
-			scanf("%c", &command);
+			scanf(" %c", &command);
 
 			command = toupper(command);
-			int response;
+			printf("Received command: '%c'\n", command); // debug
+			char response;
 
 			//Send command to process manager
 			write(command_fd[1], &command, sizeof(char));
 			read(response_fd[0], &response, sizeof(char));
+            if (command == 'T') {
+                break;
+            }
 		}
 		wait(NULL);
 		close(command_fd[1]);
