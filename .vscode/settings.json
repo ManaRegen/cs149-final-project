@@ -8,7 +8,8 @@
         "p.h": "c",
         "q.h": "c",
         "t.h": "c",
-        "u.h": "c"
+        "u.h": "c",
+        "files.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
