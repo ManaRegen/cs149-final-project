@@ -24,7 +24,6 @@ static void blockProcess();
 static void reporterProcess();
 
 void initializePm() {
-    extern Queue readyState;
     PcbEntry initProcess = {
         .processId = 0,
         .parentProcessId = 0,
