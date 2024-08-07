@@ -23,9 +23,24 @@ PcbEntry pcbTable[99];
 static void blockProcess();
 static void reporterProcess();
 
-static void initializePm() {
+void initializePm() {
     extern Queue readyState;
-    PcbEntry initProcess = {0, 0, *init, 0, 0, 0, 0, 0};
+    PcbEntry initProcess = {
+        .processId = 0,
+        .parentProcessId = 0,
+        .program = {0},
+        .programCounter = 0,
+        .value = 100,       
+        .priority = 1,      
+        .startTime = 0,     
+        .timeUsed = 0       
+    };
+    
+    // copy the init array to the program field
+    for (int i = 0; i < 16 / sizeof(init[0]); i++) {
+        initProcess.program[i] = init[i];
+    }
+    
     pcbTable[0] = initProcess;
     runningState = 0;
 }

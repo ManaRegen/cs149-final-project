@@ -2,8 +2,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include "../headers/queue.h" 
+#include "../headers/structs.h"
 
+extern Queue readyState;
+extern Queue blockedState;
+extern int runningState;
 extern int time;
+extern PcbEntry pcbTable[];
 
 static void reporterProcess()
 { // to be completed
@@ -13,7 +19,10 @@ static void reporterProcess()
 
     printf("CURRENT TIME: %d\n\n", time);
 
-    printf("RUNNING PROCESSES: \n");
+    PcbEntry runningP = pcbTable[runningState]; 
+    printf("RUNNING PROCESS: \n");
+    printf("PID: %d, PPID: %d, Priority: %d, Value: %d, Start Time: %d, CPU Time Used: %d\n", 
+    runningP.processId, runningP.parentProcessId, runningP.priority, runningP.value, runningP.startTime, runningP.timeUsed);
 }
 
 void p()
