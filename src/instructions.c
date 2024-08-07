@@ -49,7 +49,18 @@ void E()
 //Create a new process
 void F()
 {
-
+    //Get the next free PCB index
+    for (int i = 0; i < 99; i++) 
+    {
+        if (pcbTable[i].processId == -1) 
+        { 
+            pcbTable[i].parentProcessId = pcbTable[runningState].processId;
+            memcpy(pcbTable[i].program, pcbTable[runningState].program, sizeof(Instruction) * 99);
+            pcbTable[i].programCounter = pcbTable[runningState].programCounter + 1;
+            pcbTable[i].value = pcbTable[runningState].value;
+            pcbTable[i].priority = pcbTable[runningState].priority;
+        }
+    }
 }
 
 //Replace the program of the process with filename and set the program counter to the first instruction of filename
