@@ -17,7 +17,7 @@ static void contextSwitchIn()
     }
     
 }
-
+/*
 static void executeCode() {
     int currentLine = cpu.programCounter;
     Instruction currentInstruction = cpu.program[currentLine];
@@ -54,6 +54,7 @@ static void executeCode() {
             break;
         }
 }
+*/
 
 void q()
 {

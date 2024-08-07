@@ -5,7 +5,7 @@
 #include "../headers/structs.h"
 #include <string.h>
 
-Cpu cpu;
+extern Cpu cpu;
 extern int runningState;
 extern Queue blockedState;
 extern PcbEntry pcbTable[99];

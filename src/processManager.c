@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <string.h>
 #include "../headers/queue.h"
 #include "../headers/structs.h"
 #include "../headers/q.h"
@@ -10,64 +11,117 @@
 #include "../headers/t.h"
 #include "../headers/files.h"
 
-int totalTurnaround = 0;
-int completedProcessesCount = 0;
+#define MAX_PROCESSES 99
+
+int time = 0;
+Cpu cpu;
+PcbEntry pcbTable[MAX_PROCESSES];
 
 Queue readyState;
 Queue blockedState;
 int runningState;
-int time = 0;
 
-PcbEntry pcbTable[99];
+int totalTurnaround;
+int completedProcessesCount;
 
-static void blockProcess();
-static void reporterProcess();
-
-void initializePm()
+static void initializePcbTable()
 {
-    PcbEntry initProcess = {
-        .processId = 0,
-        .parentProcessId = 0,
-        .program = {0},
-        .programCounter = 0,
-        .value = 100,
-        .priority = 1,
-        .startTime = 0,
-        .timeUsed = 0};
-
-    // copy the init array to the program field
-    for (int i = 0; i < 16 / sizeof(init[0]); i++)
+    for (int i = 0; i < MAX_PROCESSES; i++)
     {
-        initProcess.program[i] = init[i];
+        pcbTable[i].processId = -1;
+    }
+}
+
+int createProcess(int parentPid, Program program) {
+    for (int i = 0; i < 99; i++) {
+        if (pcbTable[i].processId == -1) {  // Find an unoccupied spot
+            PcbEntry newProcess;
+
+            // Assign the provided program to the new process
+            newProcess.program = program;
+
+            newProcess.processId = i;
+            newProcess.parentProcessId = parentPid;  // Set parent PID
+            newProcess.programCounter = 0;
+            newProcess.value = 0;
+            newProcess.priority = 0;  // Default priority
+            newProcess.startTime = 0;  // Set when the process starts
+            newProcess.timeUsed = 0;
+
+            // Add the new process to the PCB table
+            pcbTable[i] = newProcess;
+
+            printf("Process %d created and added to PCB table at index %d.\n", i, i);
+            return i;  // Return the new PID
+        }
+    }
+    return -1;  // No available spot
+}
+
+static void loadContext(int processIndex)
+{
+    // Check if the process index is valid
+    if (processIndex < 0 || processIndex >= MAX_PROCESSES)
+    {
+        printf("Invalid process index\n");
+        return;
     }
 
-    Cpu cpu = {
-        .program = &initProcess.program,
-        .programCounter = 0,
-        .timeSlice = 5, // what is a time slice
-        .timeSliceUsed = 0,
-    };
+    PcbEntry newProcess = pcbTable[processIndex];
 
-    pcbTable[0] = initProcess;
-    runningState = 0;
+    cpu.program = newProcess.program;
+    cpu.programCounter = newProcess.programCounter;
+    cpu.value = newProcess.value;
+    cpu.timeSlice = 0; // Assuming the time slice needs to be initialized/reset
+    cpu.timeSliceUsed = newProcess.timeUsed;
+
+    runningState = processIndex;
+
+    if (newProcess.startTime == 0)
+    {
+        newProcess.startTime = time;
+    }
+
+    printf("Process %d is now running.\n", newProcess.processId);
+}
+
+static void saveContext()
+{
+    if (runningState < 0 || runningState >= MAX_PROCESSES)
+    {
+        printf("Invalid running state\n");
+        return;
+    }
+
+    // Save the current CPU context into the PCB
+    pcbTable[runningState].programCounter = cpu.programCounter;
+    pcbTable[runningState].value = cpu.value;
+    pcbTable[runningState].timeUsed = cpu.timeSliceUsed;
+
+    // Reset running state
+    runningState = -1;
+
+    printf("Context for process %d saved\n", pcbTable[runningState].processId);
+}
+
+static void initializePm()
+{
+    initializePcbTable();
+    createProcess(0, init);
+    loadContext(0);
+    initializeQueue(&readyState);
+    initializeQueue(&blockedState);
+    printf("Process Manager has been initialized.\n");
 }
 
 void processManager(int command_fd[2], int response_fd[2])
 {
-    // Initialize the queue
-    initializePm();
-    initializeQueue(&readyState);
-
-    // Loop to add all processes to the readyState queue
-    for (int i = 0; i < 99; i++)
-    {
-        enqueue(&readyState, pcbTable[i].processId);
-    }
-
     close(command_fd[1]);  // Close unused write end
     close(response_fd[0]); // close unused read end
     char command;
     char signal;
+
+    initializePm();
 
     while (true)
     {
@@ -78,7 +132,6 @@ void processManager(int command_fd[2], int response_fd[2])
             q();
             break;
         case 'U':
-            // Unblock the first process in the blocked queue
             u(blockedState, readyState);
             break;
         case 'P':
