@@ -1,5 +1,5 @@
-#ifndef INSTRUCTIONS_H
-#define INSTRUCTIONS_H
+#ifndef OPERATIONS_H
+#define OPERATIONS_H
 
 #include "queue.h"
 #include "structs.h"
@@ -23,4 +23,4 @@ void E();         // Terminate the process
 void F();         // Create a new process
 void R(char filename); // Replace the program of the process with filename
 
-#endif // INSTRUCTIONS_H
+#endif // OPERATIONS_H

@@ -1,6 +1,6 @@
 #include "../headers/queue.h"   // Include for Queue related operations
 #include "../headers/structs.h" // Include for PcbEntry
-#include "../headers/instructions.h"
+#include "../headers/operations.h"
 
 extern Queue readyState;
 extern int runningState;
