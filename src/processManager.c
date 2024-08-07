@@ -8,13 +8,14 @@
 #include "../headers/p.h"
 #include "../headers/u.h"
 #include "../headers/t.h"
+#include "../headers/files.h"
 
 int totalTurnaround = 0;
 int completedProcessesCount = 0;
 
 Queue readyState;
 Queue blockedState;
-int runningState = -1;
+int runningState;
 int time = 0;
 
 PcbEntry pcbTable[99];
@@ -22,9 +23,17 @@ PcbEntry pcbTable[99];
 static void blockProcess();
 static void reporterProcess();
 
+static void initializePm() {
+    extern Queue readyState;
+    PcbEntry initProcess = {0, 0, *init, 0, 0, 0, 0, 0};
+    pcbTable[0] = initProcess;
+    runningState = 0;
+}
+
 void processManager(int command_fd[2], int response_fd[2])
 {
     // Initialize the queue
+    initializePm();
     initializeQueue(&readyState);
 
     // Loop to add all processes to the readyState queue
@@ -63,3 +72,4 @@ void processManager(int command_fd[2], int response_fd[2])
         write(response_fd[1], &signal, sizeof(char));
     }
 }
+

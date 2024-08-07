@@ -5,7 +5,7 @@ extern Queue readyState;
 extern int runningState;
 extern int time;
 
-void runProcess()
+static void contextSwitchIn()
 { // selects process from the top of the readyState queue to run
     // Update runningState and readyState
     if (!isEmpty(&readyState))
@@ -21,7 +21,7 @@ void q()
     // Execute the next instruction of the running process
     if (runningState == -1)
     {
-        runProcess();
+        contextSwitchIn();
     }
     time++;
 }
