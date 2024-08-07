@@ -48,21 +48,23 @@ int main(int argc, char *argv[])
 
 		while (true)
 		{
+			char response;
+			read(response_fd[0], &response, sizeof(char));
+			if (command == 'T')
+			{
+				break;
+			}
+
 			// Prompt user
 			printf("$ ");
 			scanf(" %c", &command);
 
 			command = toupper(command);
 			printf("Received command: '%c'\n", command); // debug
-			char response;
+			
 
 			// Send command to process manager
-			write(command_fd[1], &command, sizeof(char));
-			read(response_fd[0], &response, sizeof(char));
-			if (command == 'T')
-			{
-				break;
-			}
+			write(command_fd[1], &command, sizeof(char));		
 		}
 		wait(NULL);
 		close(command_fd[1]);

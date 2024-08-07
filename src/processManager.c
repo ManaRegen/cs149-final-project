@@ -122,6 +122,8 @@ void processManager(int command_fd[2], int response_fd[2])
     char signal;
 
     initializePm();
+    signal = 1;
+    write(response_fd[1], &signal, sizeof(char));
 
     while (true)
     {
