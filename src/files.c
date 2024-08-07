@@ -19,4 +19,8 @@ Instruction init[] = {
     {'R', 0, "file_e"},
     {'E', 0, ""}};
 
-
+Instruction file_a[] = {
+    {'S', 4, ""},
+    {'A', 8, ""},
+    {'D', 2, ""}
+}    
