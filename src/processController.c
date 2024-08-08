@@ -57,11 +57,6 @@ void loadContext(int processIndex)
 
     runningState = processIndex;
 
-    if (newProcess.startTime == 0)
-    {
-        newProcess.startTime = time;
-    }
-
     printf("Process %d is now running.\n", newProcess.processId);
 }
 
