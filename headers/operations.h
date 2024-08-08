@@ -20,7 +20,7 @@ void A(int n);    // Add n to CPU value
 void D(int n);    // Subtract n from CPU value
 void B();         // Block the running process
 void E();         // Terminate the process
-void F();         // Create a new process
+void F(int n);         // Create a new process
 void R(char *filename); // Replace the program of the process with filename
 
 #endif // OPERATIONS_H

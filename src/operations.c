@@ -4,6 +4,8 @@
 #include "../headers/queue.h"
 #include "../headers/structs.h"
 #include <string.h>
+#include "../headers/globals.h"
+#include "../headers/processController.h"
 
 //Set CPU value to n
 void S(int n)
@@ -41,9 +43,10 @@ void E()
 }
 
 //Create a new process
-void F()
+void F(int n)
 {
-
+    createProcess(runningState, cpu.program);
+    cpu.programCounter += n;
 }
 
 //Replace the program of the process with filename and set the program counter to the first instruction of filename

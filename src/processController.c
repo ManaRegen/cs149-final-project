@@ -2,11 +2,19 @@
 #include "../headers/globals.h"
 #include "../headers/structs.h"
 
+void addToReadyQueue(int pid)
+{
+    PcbEntry p = pcbTable[pid];
+    int prio = p.priority;
+    enqueue(&readyState[prio], pid);
+}
+
 static void configureRoot(PcbEntry newProcess)
 {
     newProcess.programCounter = 0;
     newProcess.value = 0;
     newProcess.priority = 0;
+    addToReadyQueue(newProcess.processId);
 }
 
 static void configureNonRoot(PcbEntry newProcess, int parentPid)
@@ -104,6 +112,20 @@ void loadContext(int processIndex)
     printf("Process %d is now running.\n", newProcess.processId);
 }
 
+static void setPriority(PcbEntry p)
+{
+    if (cpu.timeSliceUsed = cpu.timeSlice)
+    {
+        p.priority--;
+        p.priority = p.priority < 0 ? 0 : p.priority;
+    }
+    else
+    {
+        p.priority++;
+        p.priority = p.priority < 0 ? 0 : p.priority;
+    }
+}
+
 void saveContext()
 {
     if (runningState < 0 || runningState >= MAX_PROCESSES)
@@ -113,12 +135,23 @@ void saveContext()
     }
 
     // Save the current CPU context into the PCB
-    pcbTable[runningState].programCounter = cpu.programCounter;
-    pcbTable[runningState].value = cpu.value;
-    pcbTable[runningState].timeUsed = cpu.timeSliceUsed;
+    PcbEntry currentProcess = pcbTable[runningState];
+    currentProcess.programCounter = cpu.programCounter;
+    currentProcess.value = cpu.value;
+    currentProcess.timeUsed = cpu.timeSliceUsed;
+
+    setPriority(currentProcess);
 
     // Reset running state
     runningState = -1;
 
-    printf("Context for process %d saved\n", pcbTable[runningState].processId);
+    printf("Context for process %d saved\n", currentProcess.processId);
+}
+
+
+
+void blockProcess(int pid)
+{
+    saveContext();
+    enqueue(&blockedState, pid);
 }

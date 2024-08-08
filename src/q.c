@@ -27,7 +27,7 @@ static void executeCode()
         E();
         break;
     case 'F':
-        F();
+        F(currentInstruction.intArg);
         break;
     case 'R':
         R(currentInstruction.stringArg);
