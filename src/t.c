@@ -4,7 +4,7 @@
 extern int totalTurnaround;
 extern int completedProcessesCount;
 
-void t(int command_fd[2], int response_fd[2]) {
+void terminateProcessManager(int command_fd[2], int response_fd[2]) {
     // Print average turnaround time and terminate the system
     int avgTurnaround;
     char signal;

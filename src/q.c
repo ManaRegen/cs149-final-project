@@ -56,7 +56,7 @@ static void executeCode() {
 }
 */
 
-void q()
+void incrementTime()
 {
     // Execute the next instruction of the running process
     if (runningState == -1)

@@ -1,6 +1,6 @@
 #ifndef Q_H
 #define Q_H
 
-void q();
+void incrementTime();
 
 #endif // Q_H

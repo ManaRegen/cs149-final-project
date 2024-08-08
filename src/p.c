@@ -25,7 +25,7 @@ static void reporterProcess()
     runningP.processId, runningP.parentProcessId, runningP.priority, runningP.value, runningP.startTime, runningP.timeUsed);
 }
 
-void p()
+void printReport()
 {
     // Spawn a reporter process
     if (fork() == 0)

@@ -40,16 +40,16 @@ void processManager(int command_fd[2], int response_fd[2])
         switch (command)
         {
         case 'Q':
-            q();
+            incrementTime();
             break;
         case 'U':
-            u(blockedState, readyState);
+            unblockProcess(blockedState, readyState);
             break;
         case 'P':
-            p();
+            printReport();
             break;
         case 'T':
-            t(command_fd, response_fd);
+            terminateProcessManager(command_fd, response_fd);
             return;
         default:
             printf("Invalid command. Please try again.\n");
