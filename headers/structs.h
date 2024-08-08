@@ -10,6 +10,7 @@ typedef struct {
 typedef struct {
     Instruction instructions[99];
     int programSize;
+    char name[99];
 } Program;
 
 typedef struct
