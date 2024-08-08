@@ -10,7 +10,8 @@
         "t.h": "c",
         "u.h": "c",
         "files.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "globals.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

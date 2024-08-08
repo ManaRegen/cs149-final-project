@@ -3,11 +3,7 @@
 #include "../headers/structs.h" // Include for PcbEntry
 #include "../headers/operations.h"
 #include "../headers/processController.h"
-
-static void scheduleProcess() // probably move to processController
-{
-
-}
+#include "../headers/scheduler.h"
 
 static void executeCode()
 {
@@ -59,20 +55,6 @@ static void completeProcess()
 void incrementTime()
 {
     time++;
-
-
-    /*
-    Probably replace with scheduleProcess
-    int priorityProcessPid = getHighestPriorityProcess(); 
-
-    if (priorityProcessPid > runningState)
-    {
-        if (runningState != -1)
-        { 
-            saveContext();
-        }
-        loadContext(priorityProcessPid);
-    }
-    */
+    scheduleProcess();
     executeCode();
 }

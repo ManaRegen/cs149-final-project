@@ -4,6 +4,16 @@
 #include "../headers/processController.h"
 #include "../headers/queue.h"
 
+static int dequeueIfNotEmpty(Queue *queue)
+{
+    if (!isEmpty(queue))
+    {
+        peek(queue);
+        dequeue(queue);
+    }
+    return -1;
+}
+
 static int getHighestPriorityProcess()
 {
     int pid;
@@ -32,21 +42,14 @@ static int getHighestPriorityProcess()
         return pid;
     }
 
-    return -1;
-}
-
-static int dequeueIfNotEmpty(Queue *queue)
-{
-    if (!isEmpty(queue))
-    {
-        peek(queue);
-        dequeue(queue);
-    }
-    return -1;
+    return runningState;
 }
 
 void scheduleProcess()
 {
     int highestPriorityProcess = getHighestPriorityProcess();
-    loadContext(highestPriorityProcess);
+    if (highestPriorityProcess != runningState)
+    {
+        loadContext(highestPriorityProcess);
+    }
 }

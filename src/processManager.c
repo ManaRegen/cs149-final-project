@@ -18,8 +18,13 @@ static void initializePm()
     initializePcbTable();
     createProcess(0, init);
     loadContext(0);
-    initializeQueue(&readyState);
     initializeQueue(&blockedState);
+
+    for (int i = 0; i < 4; i++)
+    {
+        initializeQueue(&readyState[i]);
+    }
+    
     printf("Process Manager has been initialized.\n");
 }
 

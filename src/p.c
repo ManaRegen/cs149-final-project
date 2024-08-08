@@ -6,11 +6,6 @@
 #include "../headers/structs.h"
 #include "../headers/globals.h"
 
-extern Queue readyState;
-extern Queue blockedState;
-extern int time;
-extern PcbEntry pcbTable[];
-
 static void reporterProcess()
 { // to be completed
     printf("\n****************************************************************\n");
