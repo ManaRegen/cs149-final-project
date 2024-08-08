@@ -1,67 +1,64 @@
+#include <stdbool.h>
 #include "../headers/queue.h"   // Include for Queue related operations
 #include "../headers/structs.h" // Include for PcbEntry
 #include "../headers/operations.h"
+#include "../headers/processController.h"
 
-extern Queue readyState;
-extern int runningState;
-extern int time;
-extern Cpu cpu;
+static int getHighestPriorityProcess()
+{
+}
 
-static void contextSwitchIn()
-{ // selects process from the top of the readyState queue to run
-    // Update runningState and readyState
-    if (!isEmpty(&readyState))
+static void executeCode()
+{
+    Instruction currentInstruction = cpu.program.instructions[cpu.programCounter];
+
+    switch (currentInstruction.operation)
     {
-        runningState = readyState.front;
-        dequeue(&readyState);
+    case 'S':
+        S(currentInstruction.intArg);
+        break;
+    case 'A':
+        A(currentInstruction.intArg);
+        break;
+    case 'D':
+        D(currentInstruction.intArg);
+        break;
+    case 'B':
+        B();
+        break;
+    case 'E':
+        E();
+        break;
+    case 'F':
+        F();
+        break;
+    case 'R':
+        R(currentInstruction.stringArg);
+        break;
+    default:
+        printf("Invalid operation on line %d. Please try again.\n", cpu.programCounter);
+        break;
     }
-    
-}
-/*
-static void executeCode() {
-    int currentLine = cpu.programCounter;
-    Instruction currentInstruction = cpu.program[currentLine];
 
-    char op = currentInstruction.operation;
-    int intArg = currentInstruction.intArg;
-    char stringArg[] = currentInstruction.stringArg;
-
-    switch (op)
-        {
-        case 'S':
-            S(intArg);
-            break;
-        case 'A':
-            A(intArg);
-            break;
-        case 'D':
-            D(intArg);
-            break;
-        case 'B':
-            B();
-            break;            
-        case 'E':
-            E();
-            break;
-        case 'F':
-            F();
-            break;
-        case 'R':
-            R(char filename[])
-            break;
-        default:
-            printf("Invalid operation on line %d. Please try again.\n", currentLine);
-            break;
-        }
+    cpu.programCounter++;
+    cpu.timeSliceUsed++;
+    // need to act on when a process is complete --> remove from pcbTable, set runningState to -1, increment completeProcesses, calculate & increment turnaround time
 }
-*/
+
+static bool processIsComplete() { // unused so far
+    return (cpu.programCounter == cpu.program.programSize);
+}
 
 void incrementTime()
 {
-    // Execute the next instruction of the running process
-    if (runningState == -1)
-    {
-        contextSwitchIn();
-    }
     time++;
+
+    int priorityProcessPid = getHighestPriorityProcess(); // ensure that running process is the highest priority; replace it if it isn't
+    if (priorityProcessPid != runningState)
+    {
+        saveContext();
+        loadContext(priorityProcessPid);
+    }
+
+    executeCode();
 }

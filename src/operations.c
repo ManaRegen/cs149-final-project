@@ -53,7 +53,7 @@ void F()
 }
 
 //Replace the program of the process with filename and set the program counter to the first instruction of filename
-void R(char filename)
+void R(char *filename)
 {
     //pcbTable[runningState].program = filename;
     //pcbTable[runningState].programCounter = 0;
