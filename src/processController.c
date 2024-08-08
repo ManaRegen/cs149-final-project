@@ -24,7 +24,7 @@ int createProcess(int parentPid, Program program)
             newProcess.parentProcessId = parentPid; // Set parent PID
             newProcess.programCounter = 0;
             newProcess.value = 0;
-            newProcess.priority = 0;  // Default priority
+            newProcess.priority = 0;     // Default priority
             newProcess.startTime = time; // Set when the process starts
             newProcess.timeUsed = 0;
 
@@ -36,6 +36,25 @@ int createProcess(int parentPid, Program program)
         }
     }
     return -1; // No available spot
+}
+
+int getTimeSlice(PcbEntry p)
+{
+    int prio = p.priority;
+    switch (prio)
+    {
+        case 0:
+            return 1;
+        case 1:
+            return 2;
+        case 2:
+            return 4;
+        case 3:
+            return 8;
+        default:
+            printf("Process %d is assigned an invalid priority.\n", p.processId);
+            return -1;    
+    }
 }
 
 void loadContext(int processIndex)
@@ -52,8 +71,14 @@ void loadContext(int processIndex)
     cpu.program = newProcess.program;
     cpu.programCounter = newProcess.programCounter;
     cpu.value = newProcess.value;
-    cpu.timeSlice = 0; // Assuming the time slice needs to be initialized/reset
+ 
     cpu.timeSliceUsed = newProcess.timeUsed;
+    cpu.timeSlice = getTimeSlice(newProcess);
+    if (cpu.timeSlice == -1) 
+    {
+        printf("Error setting time slice for process %d.\n", processIndex);
+        return;
+    }
 
     runningState = processIndex;
 
