@@ -7,7 +7,7 @@ int time = 0;
 Cpu cpu;
 PcbEntry pcbTable[MAX_PROCESSES];
 
-Queue readyState;
+Queue readyState[4];
 Queue blockedState;
 int runningState;
 

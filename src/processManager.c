@@ -43,7 +43,7 @@ void processManager(int command_fd[2], int response_fd[2])
             incrementTime();
             break;
         case 'U':
-            unblockProcess(blockedState, readyState);
+            // unblockProcess(blockedState, readyState[]);
             break;
         case 'P':
             printReport();

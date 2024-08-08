@@ -10,7 +10,7 @@ extern int time;
 extern Cpu cpu;
 extern PcbEntry pcbTable[];
 
-extern Queue readyState;
+extern Queue readyState[];
 extern Queue blockedState;
 extern int runningState;
 

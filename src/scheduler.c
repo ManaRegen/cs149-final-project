@@ -39,7 +39,8 @@ static int dequeueIfNotEmpty(Queue *queue)
 {
     if (!isEmpty(queue))
     {
-        return dequeue(queue);
+        peek(queue);
+        dequeue(queue);
     }
     return -1;
 }
