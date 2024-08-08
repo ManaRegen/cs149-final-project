@@ -25,7 +25,7 @@ int createProcess(int parentPid, Program program)
             newProcess.programCounter = 0;
             newProcess.value = 0;
             newProcess.priority = 0;  // Default priority
-            newProcess.startTime = 0; // Set when the process starts
+            newProcess.startTime = time; // Set when the process starts
             newProcess.timeUsed = 0;
 
             // Add the new process to the PCB table
