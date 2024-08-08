@@ -32,11 +32,11 @@ int createProcess(int parentPid, Program program)
         if (pcbTable[i].processId == -1) // find an unoccupied spot
         {
             PcbEntry newProcess;
-            newProcess.program = program;
             newProcess.processId = i;
             newProcess.parentProcessId = parentPid;
-            newProcess.timeUsed = 0;
+            newProcess.program = program;
             newProcess.startTime = time;
+            newProcess.timeUsed = 0;
 
             if (parentPid == -1)
             {

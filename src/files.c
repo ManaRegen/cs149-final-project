@@ -30,5 +30,5 @@ Program file_a = {
         {'D', 2, ""}
     },
     .programSize = 3,
-    .name = "file_a";
+    .name = "file_a"
 };
