@@ -4,9 +4,9 @@
 #include "../headers/operations.h"
 #include "../headers/processController.h"
 
-static int getHighestPriorityProcess()
+static void scheduleProcess() // probably move to processController
 {
-    return -1; // if there are no more processes to run
+
 }
 
 static void executeCode()
@@ -46,24 +46,33 @@ static void executeCode()
     // need to act on when a process is complete --> remove from pcbTable, set runningState to -1, increment completeProcesses, calculate & increment turnaround time
 }
 
-static bool processIsComplete() { // unused so far
+static bool lastInstruction()
+{ // unused so far
     return (cpu.programCounter == cpu.program.programSize);
+}
+
+static void completeProcess()
+{
+    
 }
 
 void incrementTime()
 {
     time++;
 
-    int priorityProcessPid = getHighestPriorityProcess(); // ensure that running process is the highest priority; replace it if it isn't
+
+    /*
+    Probably replace with scheduleProcess
+    int priorityProcessPid = getHighestPriorityProcess(); 
 
     if (priorityProcessPid > runningState)
-    {   
-        if (runningState != -1) { // there is currently no process running
+    {
+        if (runningState != -1)
+        { 
             saveContext();
         }
         loadContext(priorityProcessPid);
     }
-    
-
+    */
     executeCode();
 }
