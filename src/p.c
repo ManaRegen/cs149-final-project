@@ -4,10 +4,10 @@
 #include <sys/wait.h>
 #include "../headers/queue.h" 
 #include "../headers/structs.h"
+#include "../headers/globals.h"
 
 extern Queue readyState;
 extern Queue blockedState;
-extern int runningState;
 extern int time;
 extern PcbEntry pcbTable[];
 
@@ -18,11 +18,11 @@ static void reporterProcess()
     printf("****************************************************************\n\n");
 
     printf("CURRENT TIME: %d\n\n", time);
-
-    PcbEntry runningP = pcbTable[runningState]; 
+    
+    PcbEntry runningP = pcbTable[runningState];  
     printf("RUNNING PROCESS: \n");
     printf("PID: %d, PPID: %d, Priority: %d, Value: %d, Start Time: %d, CPU Time Used: %d\n", 
-    runningP.processId, runningP.parentProcessId, runningP.priority, runningP.value, runningP.startTime, runningP.timeUsed);
+    runningP.processId, runningP.parentProcessId, runningP.priority, cpu.value, runningP.startTime, cpu.timeSliceUsed);
 }
 
 void printReport()
