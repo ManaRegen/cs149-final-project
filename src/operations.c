@@ -5,12 +5,6 @@
 #include "../headers/structs.h"
 #include <string.h>
 
-extern Cpu cpu;
-extern int runningState;
-extern Queue blockedState;
-extern PcbEntry pcbTable[99];
-extern int time;
-
 //Set CPU value to n
 void S(int n)
 {
