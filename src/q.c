@@ -6,6 +6,7 @@
 
 static int getHighestPriorityProcess()
 {
+    return -1; // if there are no more processes to run
 }
 
 static void executeCode()
@@ -54,11 +55,15 @@ void incrementTime()
     time++;
 
     int priorityProcessPid = getHighestPriorityProcess(); // ensure that running process is the highest priority; replace it if it isn't
-    if (priorityProcessPid != runningState)
-    {
-        saveContext();
+
+    if (priorityProcessPid > runningState)
+    {   
+        if (runningState != -1) { // there is currently no process running
+            saveContext();
+        }
         loadContext(priorityProcessPid);
     }
+    
 
     executeCode();
 }
