@@ -16,7 +16,7 @@
 static void initializePm()
 {
     initializePcbTable();
-    createProcess(0, init);
+    createProcess(-1, init);
     loadContext(0);
     initializeQueue(&blockedState);
 
