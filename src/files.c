@@ -19,7 +19,8 @@ Program init = {
         {'R', 0, "file_e"},
         {'E', 0, ""}
     },
-    .programSize = 16
+    .programSize = 16,
+    .name = "init"
 };
 
 Program file_a = {
@@ -28,5 +29,6 @@ Program file_a = {
         {'A', 8, ""},
         {'D', 2, ""}
     },
-    .programSize = 3
+    .programSize = 3,
+    .name = "file_a";
 };
