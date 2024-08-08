@@ -10,30 +10,32 @@ void initializePcbTable()
     }
 }
 
-int createProcess(int parentPid, Program program) {
-    for (int i = 0; i < 99; i++) {
-        if (pcbTable[i].processId == -1) {  // Find an unoccupied spot
+int createProcess(int parentPid, Program program)
+{
+    for (int i = 0; i < 99; i++)
+    {
+        if (pcbTable[i].processId == -1)
+        { // Find an unoccupied spot
             PcbEntry newProcess;
 
             // Assign the provided program to the new process
             newProcess.program = program;
-
             newProcess.processId = i;
-            newProcess.parentProcessId = parentPid;  // Set parent PID
+            newProcess.parentProcessId = parentPid; // Set parent PID
             newProcess.programCounter = 0;
             newProcess.value = 0;
             newProcess.priority = 0;  // Default priority
-            newProcess.startTime = 0;  // Set when the process starts
+            newProcess.startTime = 0; // Set when the process starts
             newProcess.timeUsed = 0;
 
             // Add the new process to the PCB table
             pcbTable[i] = newProcess;
 
             printf("Process %d created and added to PCB table at index %d.\n", i, i);
-            return i;  // Return the new PID
+            return i; // Return the new PID
         }
     }
-    return -1;  // No available spot
+    return -1; // No available spot
 }
 
 void loadContext(int processIndex)
