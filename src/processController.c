@@ -162,3 +162,11 @@ void blockProcess(int pid)
     enqueue(&blockedState, pid);
     printQueue(&blockedState);
 }
+
+void unblockProcess() 
+{
+    int pid = peek(&blockedState);
+    int priority = pcbTable[pid].priority;
+    enqueue(&readyState[priority], pid);
+    dequeue(&blockedState);
+}

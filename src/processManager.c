@@ -7,7 +7,6 @@
 #include "../headers/structs.h"
 #include "../headers/q.h"
 #include "../headers/p.h"
-#include "../headers/u.h"
 #include "../headers/t.h"
 #include "../headers/files.h"
 #include "../headers/globals.h"
@@ -48,7 +47,7 @@ void processManager(int command_fd[2], int response_fd[2])
             incrementTime();
             break;
         case 'U':
-            // unblockProcess(blockedState, readyState[]);
+            unblockProcess(); 
             break;
         case 'P':
             printReport();

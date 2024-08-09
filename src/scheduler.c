@@ -47,15 +47,25 @@ static int getHighestPriorityProcess()
 
 void scheduleProcess()
 {   
-    PcbEntry currentProcess = pcbTable[runningState];
-    PcbEntry highPriorityCandidate = pcbTable[getHighestPriorityProcess()];
-    int highestPriorityPid = (highPriorityCandidate.priority > currentProcess.priority) ? highPriorityCandidate.priority : currentProcess.priority;
-
-    printf("The highest priority process has pid %d.\n", highestPriorityPid);
-    if (highestPriorityPid != runningState)
+    int highestPriorityPid = getHighestPriorityProcess();
+    printf("Highest Priority Process: %d\n", highestPriorityPid);
+    if (highestPriorityPid == runningState)
     {
-        PcbEntry highestProcess = pcbTable[highestPriorityPid];
-        dequeue(&readyState[highestProcess.priority]);
-        loadContext(highestPriorityPid);
+        return; // No higher priority process to schedule or the same process should continue
+    }
+
+    PcbEntry highPriorityCandidate = pcbTable[highestPriorityPid];
+    PcbEntry currentProcess = pcbTable[runningState];
+
+    // Check if the new candidate has a higher priority
+    if (highPriorityCandidate.priority > currentProcess.priority || runningState == -1)
+    {
+        dequeue(&readyState[highPriorityCandidate.priority]); // Dequeue based on the process's priority queue
+        loadContext(highestPriorityPid); // Load context of the higher priority process
+        printf("Switching to process %d with higher priority.\n", highestPriorityPid);
+    }
+    else
+    {
+        printf("Continuing with the current process %d.\n", runningState);
     }
 }

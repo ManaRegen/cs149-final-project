@@ -11,5 +11,6 @@ void loadContext(int processIndex);
 void saveContext();
 void addToReadyQueue(int pid);
 void blockProcess(int pid);
+void unblockProcess(); 
 
 #endif // PROCESS_CONTROLLER_H
