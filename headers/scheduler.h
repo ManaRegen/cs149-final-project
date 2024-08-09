@@ -8,5 +8,6 @@
 #include "../headers/queue.h"
 
 void scheduleProcess();
+void checkTimeSlice();
 
 #endif // SCHEDULER_H

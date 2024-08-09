@@ -47,5 +47,7 @@ void incrementTime()
 {
     time++;
     scheduleProcess();
+    printf("Running process %d\n", runningState);
     executeCode();
+    checkTimeSlice(); 
 }
