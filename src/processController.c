@@ -18,14 +18,12 @@ static void configureRoot(PcbEntry *newProcess)
     newProcess->value = 0;
     newProcess->priority = 0;
     newProcess->startTime = time;
-    printf("Root Process Program counter: %d\n", newProcess->programCounter);
 }
 
 static void configureNonRoot(PcbEntry *newProcess, int parentPid)
 {
     PcbEntry parent = pcbTable[parentPid];
     newProcess->programCounter = parent.programCounter + 2;
-    printf("New Process Program counter: %d\n", newProcess->programCounter);
     newProcess->value = parent.value;
     newProcess->priority = parent.priority;
     addToReadyQueue(newProcess->processId);
@@ -173,6 +171,11 @@ void unblockProcess()
 
 void terminateProcess() 
 {
-    pcbTable[runningState].processId == -1;
+    PcbEntry *runningProcess = &pcbTable[runningState];  
+    int turnaroundTime = time - runningProcess->startTime;
+    totalTurnaround += turnaroundTime;
+    completedProcessesCount++;
+    
+    runningProcess->processId = -1;  
     runningState = -1;
 }
