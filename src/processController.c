@@ -161,7 +161,7 @@ void blockProcess(int pid)
     printQueue(&blockedState);
 }
 
-void unblockProcess() 
+void unblockProcess() // probably should just call addToReadyQueue but im too lazy to change it rn
 {
     int pid = peek(&blockedState);
     int priority = pcbTable[pid].priority;
