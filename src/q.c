@@ -7,7 +7,12 @@
 
 static void executeCode()
 {
+    printf("Executing instruction: %d\n", cpu.programCounter);
     Instruction currentInstruction = cpu.program.instructions[cpu.programCounter];
+    printf("Executing instruction: %c\n", currentInstruction.operation);
+
+    cpu.programCounter++;
+    cpu.timeSliceUsed++;
 
     switch (currentInstruction.operation)
     {
@@ -37,8 +42,6 @@ static void executeCode()
         break;
     }
 
-    cpu.programCounter++;
-    cpu.timeSliceUsed++;
     // need to act on when a process is complete --> remove from pcbTable, set runningState to -1, increment completeProcesses, calculate & increment turnaround time
 }
 

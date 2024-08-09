@@ -7,22 +7,28 @@ void addToReadyQueue(int pid)
     PcbEntry p = pcbTable[pid];
     int prio = p.priority;
     enqueue(&readyState[prio], pid);
+    int check = peek(&readyState[prio]);
+    printf("Process %d added to queue %d\n", check, prio);
+    printQueue(&readyState[prio]);
 }
 
-static void configureRoot(PcbEntry newProcess)
+static void configureRoot(PcbEntry *newProcess)
 {
-    newProcess.programCounter = 0;
-    newProcess.value = 0;
-    newProcess.priority = 0;
+    newProcess->programCounter = 0;
+    newProcess->value = 0;
+    newProcess->priority = 0;
+    newProcess->startTime = time;
+    printf("Root Process Program counter: %d\n", newProcess->programCounter);
 }
 
-static void configureNonRoot(PcbEntry newProcess, int parentPid)
+static void configureNonRoot(PcbEntry *newProcess, int parentPid)
 {
     PcbEntry parent = pcbTable[parentPid];
-    newProcess.programCounter = parent.programCounter + 1;
-    newProcess.value = parent.value;
-    newProcess.priority = parent.priority;
-    addToReadyQueue(newProcess.processId);
+    newProcess->programCounter = parent.programCounter + 2;
+    printf("New Process Program counter: %d\n", newProcess->programCounter);
+    newProcess->value = parent.value;
+    newProcess->priority = parent.priority;
+    addToReadyQueue(newProcess->processId);
 }
 
 void initializePcbTable()
@@ -37,9 +43,9 @@ int createProcess(int parentPid, Program program)
 {
     for (int i = 0; i < 99; i++)
     {
-        if (pcbTable[i].processId == -1) // find an unoccupied spot
+        if (pcbTable[i].processId == -1) // Find an unoccupied spot
         {
-            PcbEntry newProcess;
+            PcbEntry newProcess; // Declare newProcess as a struct, not a pointer
             newProcess.processId = i;
             newProcess.parentProcessId = parentPid;
             newProcess.program = program;
@@ -48,15 +54,15 @@ int createProcess(int parentPid, Program program)
 
             if (parentPid == -1)
             {
-                configureRoot(newProcess);
+                configureRoot(&newProcess);
             }
             else
             {
-                configureNonRoot(newProcess, parentPid);
+                configureNonRoot(&newProcess, parentPid);
             }
 
             // Add the new process to the PCB table
-            pcbTable[i] = newProcess;
+            pcbTable[i] = newProcess; // Assign the struct to the array
 
             printf("Process %d created and added to PCB table at index %d.\n", i, i);
             return i; // Return the new PID
@@ -99,6 +105,8 @@ void loadContext(int processIndex)
     cpu.programCounter = newProcess.programCounter;
     cpu.value = newProcess.value;
 
+    printf("CPU Program counter: %d\n", cpu.programCounter);
+
     cpu.timeSliceUsed = newProcess.timeUsed;
     cpu.timeSlice = getTimeSlice(newProcess);
     if (cpu.timeSlice == -1)
@@ -112,17 +120,17 @@ void loadContext(int processIndex)
     printf("Process %d is now running.\n", newProcess.processId);
 }
 
-static void setPriority(PcbEntry p)
+static void setPriority(PcbEntry *p)
 {
-    if (cpu.timeSliceUsed = cpu.timeSlice)
+    if (cpu.timeSliceUsed == cpu.timeSlice) // Use == for comparison
     {
-        p.priority--;
-        p.priority = p.priority < 0 ? 0 : p.priority;
+        p->priority--;
+        p->priority = p->priority < 0 ? 0 : p->priority;
     }
     else
     {
-        p.priority++;
-        p.priority = p.priority < 0 ? 0 : p.priority;
+        p->priority++;
+        p->priority = p->priority < 0 ? 0 : p->priority;
     }
 }
 
@@ -134,24 +142,23 @@ void saveContext()
         return;
     }
 
-    // Save the current CPU context into the PCB
-    PcbEntry currentProcess = pcbTable[runningState];
-    currentProcess.programCounter = cpu.programCounter;
-    currentProcess.value = cpu.value;
-    currentProcess.timeUsed = cpu.timeSliceUsed;
+    // Access the current process directly from the PCB table
+    PcbEntry *currentProcess = &pcbTable[runningState];
+    currentProcess->programCounter = cpu.programCounter;
+    currentProcess->value = cpu.value;
+    currentProcess->timeUsed = cpu.timeSliceUsed;
 
     setPriority(currentProcess);
 
     // Reset running state
     runningState = -1;
 
-    printf("Context for process %d saved\n", currentProcess.processId);
+    printf("Context for process %d saved\n", currentProcess->processId);
 }
-
-
 
 void blockProcess(int pid)
 {
     saveContext();
     enqueue(&blockedState, pid);
+    printQueue(&blockedState);
 }

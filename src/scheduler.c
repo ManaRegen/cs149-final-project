@@ -4,12 +4,11 @@
 #include "../headers/processController.h"
 #include "../headers/queue.h"
 
-static int dequeueIfNotEmpty(Queue *queue)
+static int getFrontIfNotEmpty(Queue *queue)
 {
     if (!isEmpty(queue))
     {
         int pid = peek(queue);
-        dequeue(queue);
         return pid;
     }
     return -1;
@@ -19,25 +18,25 @@ static int getHighestPriorityProcess()
 {
     int pid;
 
-    pid = dequeueIfNotEmpty(&readyState[3]);
+    pid = getFrontIfNotEmpty(&readyState[3]);
     if (pid != -1)
     {
         return pid;
     }
 
-    pid = dequeueIfNotEmpty(&readyState[2]);
+    pid = getFrontIfNotEmpty(&readyState[2]);
     if (pid != -1)
     {
         return pid;
     }
 
-    pid = dequeueIfNotEmpty(&readyState[1]);
+    pid = getFrontIfNotEmpty(&readyState[1]);
     if (pid != -1)
     {
         return pid;
     }
 
-    pid = dequeueIfNotEmpty(&readyState[0]);
+    pid = getFrontIfNotEmpty(&readyState[0]);
     if (pid != -1)
     {
         return pid;
@@ -47,11 +46,16 @@ static int getHighestPriorityProcess()
 }
 
 void scheduleProcess()
-{
-    int highestPriorityProcess = getHighestPriorityProcess();
-    printf("The highest priority process has pid %d.\n", highestPriorityProcess);
-    if (highestPriorityProcess != runningState)
+{   
+    PcbEntry currentProcess = pcbTable[runningState];
+    PcbEntry highPriorityCandidate = pcbTable[getHighestPriorityProcess()];
+    int highestPriorityPid = (highPriorityCandidate.priority > currentProcess.priority) ? highPriorityCandidate.priority : currentProcess.priority;
+
+    printf("The highest priority process has pid %d.\n", highestPriorityPid);
+    if (highestPriorityPid != runningState)
     {
-        loadContext(highestPriorityProcess);
+        PcbEntry highestProcess = pcbTable[highestPriorityPid];
+        dequeue(&readyState[highestProcess.priority]);
+        loadContext(highestPriorityPid);
     }
 }
