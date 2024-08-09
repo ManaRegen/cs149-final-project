@@ -34,9 +34,7 @@ void B()
 //Terminate the process
 void E()
 {
-    pcbTable[runningState].timeUsed = (time + 1) - pcbTable[runningState].startTime;
-    //terminatedProcesses++;
-    runningState = -1;
+    terminateProcess();
 }
 
 //Create a new process

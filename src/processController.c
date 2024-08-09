@@ -170,3 +170,9 @@ void unblockProcess()
     enqueue(&readyState[priority], pid);
     dequeue(&blockedState);
 }
+
+void terminateProcess() 
+{
+    pcbTable[runningState].processId == -1;
+    runningState = -1;
+}
