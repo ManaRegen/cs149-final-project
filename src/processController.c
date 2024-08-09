@@ -2,7 +2,7 @@
 #include "../headers/globals.h"
 #include "../headers/structs.h"
 
-void addToReadyQueue(int pid)
+static void addToReadyQueue(int pid)
 {
     PcbEntry p = pcbTable[pid];
     int prio = p.priority;
