@@ -6,6 +6,7 @@
 #include <string.h>
 #include "../headers/globals.h"
 #include "../headers/processController.h"
+#include "../headers/files.h"
 
 // Set CPU value to n
 void S(int n)
@@ -45,9 +46,9 @@ void F(int n)
 }
 
 // Replace the program of the process with filename and set the program counter to the first instruction of filename
-void R(char filename)
+void R(char *filename)
 {
-    ProgramnewProgram = NULL;
+    Program *newProgram = NULL;
 
     if (strcmp(filename, "init") == 0)
     {
@@ -57,6 +58,21 @@ void R(char filename)
     else if (strcmp(filename, "file_a") == 0)
     {
         newProgram = &file_a;
+    }
+
+    else if (strcmp(filename, "file_b") == 0)
+    {
+        newProgram = &file_b;
+    }
+
+    else if (strcmp(filename, "file_c") == 0)
+    {
+        newProgram = &file_c;
+    }
+
+    else if (strcmp(filename, "file_d") == 0)
+    {
+        newProgram = &file_d;
     }
 
     if (newProgram == NULL)
