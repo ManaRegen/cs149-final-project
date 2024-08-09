@@ -9,5 +9,7 @@ void initializePcbTable();
 int createProcess(int parentPid, Program program);
 void loadContext(int processIndex);
 void saveContext();
+void addToReadyQueue(int pid);
+void blockProcess(int pid);
 
 #endif // PROCESS_CONTROLLER_H

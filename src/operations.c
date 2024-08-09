@@ -28,10 +28,7 @@ void D(int n)
 //Take the PCB of the currently running process to add it to the blocked queue, store the CPU PC in the PCB's PC, store the CPU's value in the PCB's value, and change runningState to -1
 void B()
 {
-    enqueue(&blockedState, runningState);
-    //pcbTable[runningState].state = STATE_BLOCKED
-    pcbTable[runningState].programCounter = cpu.programCounter;
-    runningState = -1;
+    blockProcess(runningState);
 }
 
 //Terminate the process

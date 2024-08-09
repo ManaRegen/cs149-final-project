@@ -14,15 +14,15 @@ static void configureRoot(PcbEntry newProcess)
     newProcess.programCounter = 0;
     newProcess.value = 0;
     newProcess.priority = 0;
-    addToReadyQueue(newProcess.processId);
 }
 
 static void configureNonRoot(PcbEntry newProcess, int parentPid)
 {
     PcbEntry parent = pcbTable[parentPid];
-    newProcess.programCounter = parent.programCounter;
+    newProcess.programCounter = parent.programCounter + 1;
     newProcess.value = parent.value;
     newProcess.priority = parent.priority;
+    addToReadyQueue(newProcess.processId);
 }
 
 void initializePcbTable()

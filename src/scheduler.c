@@ -8,8 +8,9 @@ static int dequeueIfNotEmpty(Queue *queue)
 {
     if (!isEmpty(queue))
     {
-        peek(queue);
+        int pid = peek(queue);
         dequeue(queue);
+        return pid;
     }
     return -1;
 }
@@ -48,6 +49,7 @@ static int getHighestPriorityProcess()
 void scheduleProcess()
 {
     int highestPriorityProcess = getHighestPriorityProcess();
+    printf("The highest priority process has pid %d.\n", highestPriorityProcess);
     if (highestPriorityProcess != runningState)
     {
         loadContext(highestPriorityProcess);
