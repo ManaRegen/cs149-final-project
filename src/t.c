@@ -15,6 +15,7 @@ void terminateProcessManager(int command_fd[2], int response_fd[2]) {
         avgTurnaround = totalTurnaround / completedProcessesCount;
     }
 
+    printf("Completed processes: %d\n", completedProcessesCount);
     printf("Average turnaround time: %d\n", avgTurnaround);
     printf("Terminating system.\n");
 

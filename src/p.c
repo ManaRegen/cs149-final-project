@@ -5,11 +5,29 @@
 #include "../headers/structs.h"
 #include "../headers/globals.h"
 
+static void listQueueMembers(Queue *q)
+{
+    if (isEmpty(q))
+    {
+        printf("Queue is empty\n");
+    }
+    else
+    {
+        for (int i = q->front + 1; i < q->rear; i++)
+        {
+            PcbEntry runningP = pcbTable[q->items[i]];
+            printf("PID: %d, PPID: %d, Priority: %d, Value: %d, Start Time: %d, CPU Time Used: %d\n",
+                   runningP.processId, runningP.parentProcessId, runningP.priority, runningP.value, runningP.startTime, runningP.timeUsed);
+        }
+        printf("\n");
+    }
+}
+
 static void reporterProcess()
 { // to be completed
-    printf("\n****************************************************************\n");
+    printf("\n*****************************************************************************************\n");
     printf("The current system state is as follows:\n");
-    printf("****************************************************************\n\n");
+    printf("*****************************************************************************************\n\n");
 
     printf("CURRENT TIME: %d\n\n", time);
 
@@ -21,14 +39,23 @@ static void reporterProcess()
     {
         PcbEntry runningP = pcbTable[runningState];
         printf("RUNNING PROCESS: \n");
-        printf("PID: %d, PPID: %d, Priority: %d, Value: %d, Start Time: %d, CPU Time Used: %d\n",
+        printf("PID: %d, PPID: %d, Priority: %d, Value: %d, Start Time: %d, CPU Time Used: %d\n\n",
                runningP.processId, runningP.parentProcessId, runningP.priority, cpu.value, runningP.startTime, cpu.timeSliceUsed);
     }
-    printQueue(&readyState[3]);
-    printQueue(&readyState[2]);
-    printQueue(&readyState[1]);
-    printQueue(&readyState[0]);
-    printQueue(&blockedState);
+    printf("READY PROCESSES: \n");
+    printf("\nPRIORITY 3: \n");
+    listQueueMembers(&readyState[3]);
+    printf("\nPRIORITY 2: \n");
+    listQueueMembers(&readyState[2]);
+    printf("\nPRIORITY 1: \n");
+    listQueueMembers(&readyState[1]);
+    printf("\nPRIORITY 0: \n\n");
+    listQueueMembers(&readyState[0]);
+    printf("\nBLOCKED PROCESSES: \n\n");
+    listQueueMembers(&blockedState);
+
+    printf("\n*****************************************************************************************\n\n");
+
     return;
 }
 
