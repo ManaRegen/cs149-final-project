@@ -41,18 +41,6 @@ static void executeCode()
         printf("Invalid operation on line %d. Please try again.\n", cpu.programCounter);
         break;
     }
-
-    // need to act on when a process is complete --> remove from pcbTable, set runningState to -1, increment completeProcesses, calculate & increment turnaround time
-}
-
-static bool lastInstruction()
-{ // unused so far
-    return (cpu.programCounter == cpu.program.programSize);
-}
-
-static void completeProcess()
-{
-    
 }
 
 void incrementTime()
